@@ -32,7 +32,7 @@
         </div>
         <el-divider style="color: grey;font-size: 13px">没有账号</el-divider>
         <div>
-            <el-button style="width: 270px" type="warning" plain>注册账号</el-button>
+            <el-button @click="router.push('/register')" style="width: 270px" type="warning" plain>注册账号</el-button>
         </div>
     </div>
 </template>
