@@ -46,7 +46,7 @@
                             </el-input>
                         </el-col>
                         <el-col :span="1">
-                            <el-button type="success" :disabled="!isEmailValid" >获取验证码</el-button>
+                            <el-button type="success" :disabled="!isEmailValid" @click="validateEmail" >获取验证码</el-button>
                         </el-col>
                     </el-row>
                 </el-form-item>
@@ -68,6 +68,7 @@ import {Lock, User, Message, EditPen} from "@element-plus/icons-vue";
 import router from "@/router";
 import {reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
+import {post} from "@/net";
 
 const form = reactive({
     username: '',
@@ -134,6 +135,14 @@ const register = () => {
         } else {
             ElMessage.warning('请完整填写上述表单内容')
         }
+    })
+}
+
+const validateEmail = () => {
+    post('/api/auth/valid-email', {
+        email: form.email
+    }, (message) => {
+        ElMessage.success(message)
     })
 }
 
