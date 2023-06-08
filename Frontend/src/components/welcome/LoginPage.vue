@@ -24,7 +24,7 @@
                 <el-checkbox v-model="form.remember" label="记住我" />
             </el-col>
             <el-col :span="12" style="text-align: right">
-                <el-link>忘记密码?</el-link>
+                <el-link @click="router.push('forget')">忘记密码?</el-link>
             </el-col>
         </el-row>
         <div style="margin-top: 40px">
@@ -41,8 +41,9 @@
 import {User, Lock} from '@element-plus/icons-vue'
 import {reactive} from "vue";
 import {ElMessage} from "element-plus";
-import {post} from "@/net";
+import {get, post} from "@/net";
 import router from "@/router";
+import {useStore} from "@/stores";
 
 const form = reactive({
     username: '',
@@ -50,6 +51,7 @@ const form = reactive({
     remember: false
 })
 
+const store = useStore()
 const login = () => {
     if (!form.username || !form.password) {
         ElMessage.warning('请填写用户名和密码')
@@ -60,7 +62,12 @@ const login = () => {
             remember: form.remember
         }, (message) => {
             ElMessage.success(message)
-            router.push('/index')
+            get("/api/user/me", (message)=>{
+                store.auth.user = message
+                router.push('/index')
+            }, ()=>{
+                store.auth.user = null
+            })
         })
     }
 }
